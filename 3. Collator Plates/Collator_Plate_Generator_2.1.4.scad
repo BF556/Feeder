@@ -38,16 +38,19 @@ rifleHoleWidth = 12; // Set to brass width
 
 // PLATE OPTIONS
 addPivots = false;  // Add pivots for base down brass feeding
-addSlides = true;  // Add sliding slots for bullets
+addSlides = false;  // Add sliding slots for bullets
+addSideSlides = true;  // Add sliding slots on the side of hole
+slideDepth = 5.2;  // Depth of slides
+slideLength = 15; // Length of slide
 addRidges = true;  // Add top ridges for brass plates
 ridgeCenter = true; // if false ridges align with far side of hole
 ridgeAlternate = true; // Skip every other hole
 ridgeHeight = 2.0; // Ridge height in mm
-ridgeLength = 25; // Ridge length in mm
-ridgeAngle = 0; // Angle the ridges
+ridgeLength = 15; // Ridge length in mm
+ridgeAngle =30; // Angle the ridges
 
 addBevel = true;  // Add top bevel to holes
-bevelSize = 1.5; // Change depth of bevel (1.3 - 1.6)
+bevelSize = 1.55; // Change depth of bevel (1.3 - 1.6)
 hole_multiplier=1.6; // Modify the number of holes
 
 // SHAFT SLIP CLUTCH
@@ -74,16 +77,15 @@ bullet_caliber=caliber+1.0; //caliber in (mm) + 1.0 to 1.5 mm
 // ####### Customize Here ########
 /*
 description=".300 AAC Blackout";
+collator_plate_d=247.5;
 caliber=36;
 collator_plate_h=6;
 isRifleBrassPlate = true;
 rifleHoleWidth = 9;
-collator_plate_d=297;
-hole_multiplier=.6;
-ridgeAlternate = true;
-ridgeAngle = 25;
-ridgeLength = 30;
+hole_multiplier=.68;
+ridgeLength = 20;
 */
+
 
 
 //  ###########################################################
@@ -167,13 +169,13 @@ module ridges(p) {
 
     if(isRifleBrassPlate) { 
         p=p+360/round(360/bullet_caliber/hole_multiplier)/2;
-         translate([((collator_plate_d/2-ridgeLength/2-.3)*cos(p)),((collator_plate_d/2-ridgeLength/2-.3)*sin(p)),collator_plate_h/2]) rotate([-ridgeAngle,-90,p]) cube ([ridgeHeight*2,2.5,ridgeLength], center=true); 
+         translate([((collator_plate_d/2-ridgeLength/2-12)*cos(p)),((collator_plate_d/2-ridgeLength/2-12)*sin(p)),collator_plate_h/2]) rotate([-ridgeAngle,-90,p]) cube ([ridgeHeight*2,2.5,ridgeLength], center=true); 
         
         } else {
             
         if(ridgeCenter) {
-             p=p+360/round(360/bullet_caliber/hole_multiplier)/2;
-         translate([((collator_plate_d/2-ridgeLength/2-.3)*cos(p)),((collator_plate_d/2-ridgeLength/2-.3)*sin(p)),collator_plate_h/2]) rotate([-ridgeAngle,-90,p]) cube ([ridgeHeight*2,2.5,ridgeLength], center=true); 
+             p=p+(360/round(360/bullet_caliber/hole_multiplier)/2)-.5;
+         translate([((collator_plate_d/2-ridgeLength/2-3)*cos(p)),((collator_plate_d/2-ridgeLength/2-3)*sin(p)),collator_plate_h/2]) rotate([-ridgeAngle,-90,p]) cube ([ridgeHeight*2,2.5,ridgeLength], center=true); 
         
         }  else {
             p = p+(bullet_caliber/2)-(bullet_caliber/15)+.5;
@@ -332,9 +334,14 @@ module bullet_slot(z){
     
      // Add Sliding slots
      if(addSlides) {
-         translate([((collator_plate_d/2-25)*cos(z)),((collator_plate_d/2-25)*sin(z)),   (collator_plate_h/2)+(bullet_caliber/5)*bevelSize]) rotate([0,-90,z]) cylinder(d2=bullet_caliber/2, d1=bullet_caliber+(0),h=40,center=true); 
-        
+         translate([((collator_plate_d/2-25)*cos(z)),((collator_plate_d/2-25)*sin(z)),   (collator_plate_h/2)+(bullet_caliber/5)*bevelSize]) rotate([0,-90,z]) cylinder(d2=bullet_caliber/2, d1=bullet_caliber+(0),h=slideLength,center=true); 
+
     }
+    
+     if(addSideSlides) {
+      p = z+(bullet_caliber/2)-(bullet_caliber/1)+.5;
+            translate([((collator_plate_d/2-5)*cos(p+1)),((collator_plate_d/2-5)*sin(p+1)),collator_plate_h/2+slideDepth]) rotate([90,90,p]) cylinder(d2=bullet_caliber/1.2, d1=bullet_caliber+(1.5),h=slideLength,center=true); 
+     }
 
   }
 
@@ -346,7 +353,8 @@ module rifle_slot(z){
     
    // translate([((collator_plate_d/hfactor )*cos(z)),((collator_plate_d/hfactor )*sin(z)),-collator_plate_h/2-(rifleHoleWidth/6)]) rotate([0,-45,z])  cube([rifleHoleWidth*3, bullet_caliber, collator_plate_h*2], center=true);
     
-     translate([((collator_plate_d/hfactor )*cos(z)),((collator_plate_d/hfactor )*sin(z)),-collator_plate_h/2-(bullet_caliber/5.3)]) rotate([45,0,z]) cube([rifleHoleWidth*2, bullet_caliber,  bullet_caliber], center=true);
+    
+     translate([((collator_plate_d/hfactor+.1 )*cos(z)),((collator_plate_d/hfactor+.1 )*sin(z)),-collator_plate_h/2-(bullet_caliber/5.3)]) rotate([45,0,z]) cube([rifleHoleWidth*2, bullet_caliber,  bullet_caliber], center=true);
 
     }
 
@@ -404,21 +412,28 @@ description="Small Pistol Bullet (#5)";
 caliber=9;
 collator_plate_h=15; 
 hole_multiplier=1.8;
+ridgeAngle = 30;
 
-description="Large Pistol Bullet (#7)";
-caliber=11.5;
+description="Small Pistol Bullet (#5)";
+caliber=9;
 collator_plate_h=15; 
-hole_multiplier=1.6;
+hole_multiplier=1.8;
+ridgeAngle = 30;
+slideDepth = 3.7;
 
 description="Small Rifle Bullet (#2)";
 caliber=5.70;
 collator_plate_h=20; 
 hole_multiplier=2.1;
+ridgeAngle = 30;
+addSideSlides = true;
+slideDepth = 3.1;
 
 description="Large Rifle Bullet (#4)";
 caliber=7.82;
 collator_plate_h=20; 
 hole_multiplier=2.05;
+ridgeAngle = 30;
 
 description="Long Rifle Bullet (#11)";
 caliber=7.82;
@@ -446,6 +461,8 @@ collator_plate_h=8;
 addSlides = false;
 bevelSize = 1.65;
 hole_multiplier=1.5;
+addSideSlides = false;
+ridgeAngle = 30;
 
 description="Large Pistol Brass";
 caliber=15.0;
@@ -453,6 +470,8 @@ collator_plate_h=8;
 addSlides = false;
 bevelSize = 1.65;
 hole_multiplier=1.28;
+addSideSlides = false;
+ridgeAngle = 30;
 
 description="Small Brass Base Up"; 
 caliber=10.5;
@@ -461,7 +480,7 @@ addPivots = true;
 addSlides = false;
 hole_multiplier=1.7;
 bevelSize = 1.65;
-ridgeAlternate = false;
+ridgeAlternate = true;
 ridgeLength = 15;
 ridgeAngle = 40;
 
@@ -472,7 +491,7 @@ addPivots = true;
 addSlides = false;
 hole_multiplier=1.5;
 bevelSize = 1.65;
-ridgeAlternate = false;
+ridgeAlternate = true;
 ridgeLength = 15;
 ridgeAngle = 40;
 
@@ -481,9 +500,9 @@ description="Large Rifle Brass";
 caliber=54;
 collator_plate_h=6;
 isRifleBrassPlate = true;
-//ridgeAlternate = false;
 rifleHoleWidth = 12;
 hole_multiplier=.8;
+ridgeAngle = 0;
 
 description="Small Rifle Brass";
 caliber=46;
@@ -491,28 +510,131 @@ collator_plate_h=6;
 isRifleBrassPlate = true;
 rifleHoleWidth = 9;
 hole_multiplier=1;
+ridgeAngle = 0;
 
 description=".45-70 Cases";
 caliber=56;
 collator_plate_h=6;
 isRifleBrassPlate = true;
 rifleHoleWidth = 12;
+ridgeAngle = 0;
 
 description=".300 AAC Blackout";
 caliber=36;
 collator_plate_h=6;
 isRifleBrassPlate = true;
 rifleHoleWidth = 9;
+hole_multiplier=1;
+ridgeAngle = 0;
 
-description=".300 AAC Blackout MONGO";
+// ###############  MONGO  ################
+description=".300 AAC Blackout";
+collator_plate_d=297; 
 caliber=36;
 collator_plate_h=6;
 isRifleBrassPlate = true;
 rifleHoleWidth = 9;
 collator_plate_d=297;
-hole_multiplier=.6;
+hole_multiplier=.55;
 ridgeAlternate = true;
-ridgeAngle = 25;
-ridgeLength = 30;
+ridgeLength = 25;
+ridgeAngle = 0;
+
+description="Small Rifle Brass";
+collator_plate_d=297; 
+caliber=46;
+collator_plate_h=6;
+isRifleBrassPlate = true;
+rifleHoleWidth = 9;
+collator_plate_d=297;
+hole_multiplier=.56;
+ridgeAlternate = true;
+ridgeLength = 25;
+ridgeAngle = 0;
+
+description="Large Rifle Brass";
+collator_plate_d=297; 
+caliber=54;
+collator_plate_h=6;
+isRifleBrassPlate = true;
+rifleHoleWidth = 12;
+collator_plate_d=297;
+hole_multiplier=.56;
+ridgeAlternate = true;
+ridgeLength = 25;
+ridgeAngle = 0;
+
+description="Small Pistol Brass";
+collator_plate_d=297; 
+caliber=12.0;
+collator_plate_h=8;
+collator_plate_d=297;
+addSlides = false;
+bevelSize = 1.65;
+hole_multiplier=1;
+addSideSlides = false;
+ridgeAngle = 30;
+ridgeLength = 20;
+
+description="Large Pistol Brass";
+collator_plate_d=297; 
+caliber=15.0;
+collator_plate_h=8;
+collator_plate_d=297;
+addSlides = false;
+bevelSize = 1.65;
+hole_multiplier=.8;
+addSideSlides = false;
+ridgeAngle = 30;
+ridgeLength = 20;
+
+description="Large Brass Base Up";
+collator_plate_d=297; 
+caliber=12.5;
+collator_plate_h=22; 
+addPivots = true;
+addSlides = false;
+hole_multiplier=1.1;
+bevelSize = 1.65;
+ridgeAlternate = true;
+ridgeLength = 20;
+ridgeAngle = 30;
+slideDepth = 5.9;
+slideLength = 15;
+
+description="Small Brass Base Up";
+collator_plate_d=297; 
+caliber=10.5;
+collator_plate_h=20; 
+addPivots = true;
+addSlides = false;
+hole_multiplier=1.1;
+bevelSize = 1.65;
+ridgeAlternate = true;
+ridgeLength = 20;
+ridgeAngle = 30;
+slideDepth = 4.9;
+slideLength = 15;
+
+#############  300mm  ###############
+description="Small Rifle Brass";
+collator_plate_d=247.5;
+caliber=46;
+collator_plate_h=6;
+isRifleBrassPlate = true;
+rifleHoleWidth = 9;
+hole_multiplier=.65;
+ridgeLength = 20;
+ridgeAngle = 0;
+
+description="Large Rifle Brass";
+collator_plate_d=247.5;
+caliber=54;
+collator_plate_h=6;
+isRifleBrassPlate = true;
+rifleHoleWidth = 12;
+hole_multiplier=.65;
+ridgeLength = 20;
+ridgeAngle = 0;
 
 */ 
