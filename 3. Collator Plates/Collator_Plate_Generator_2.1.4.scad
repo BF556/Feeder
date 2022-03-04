@@ -73,7 +73,6 @@ shaft_slot_width=4.5;
 $fn=100; //resolution 50-100 is fine
 bullet_caliber=caliber+1.0; //caliber in (mm) + 1.0 to 1.5 mm
 
-
 // ####### Customize Here ########
 /*
 description=".300 AAC Blackout";
@@ -339,8 +338,8 @@ module bullet_slot(z){
     }
     
      if(addSideSlides) {
-      p = z+(bullet_caliber/2)-(bullet_caliber/1)+.5;
-            translate([((collator_plate_d/2-5)*cos(p+1)),((collator_plate_d/2-5)*sin(p+1)),collator_plate_h/2+slideDepth]) rotate([90,90,p]) cylinder(d2=bullet_caliber/1.2, d1=bullet_caliber+(1.5),h=slideLength,center=true); 
+      p = z+(bullet_caliber/2)-(bullet_caliber/1)-1.5;
+            translate([((collator_plate_d/2-4)*cos(p+1)),((collator_plate_d/2-4)*sin(p+1)),collator_plate_h/2+slideDepth])  rotate([84,0,p])  cylinder(d2=bullet_caliber/1.2, d1=bullet_caliber+(1.5),h=slideLength,center=true); 
      }
 
   }
@@ -408,18 +407,21 @@ addRidges = true;
 addPivots = false;
 bevelSize = 1.4;
 
-description="Small Pistol Bullet (#5)";
-caliber=9;
+description="Large Pistol Bullet (#7)";
+caliber=12;
 collator_plate_h=15; 
 hole_multiplier=1.8;
 ridgeAngle = 30;
+slideDepth = 5.5;
+slideLength = 30;
 
 description="Small Pistol Bullet (#5)";
 caliber=9;
 collator_plate_h=15; 
 hole_multiplier=1.8;
 ridgeAngle = 30;
-slideDepth = 3.7;
+slideDepth = 4.0;
+slideLength = 15;
 
 description="Small Rifle Bullet (#2)";
 caliber=5.70;
@@ -427,13 +429,16 @@ collator_plate_h=20;
 hole_multiplier=2.1;
 ridgeAngle = 30;
 addSideSlides = true;
-slideDepth = 3.1;
+slideDepth = 2.5;
+slideLength = 10;
 
 description="Large Rifle Bullet (#4)";
 caliber=7.82;
 collator_plate_h=20; 
 hole_multiplier=2.05;
 ridgeAngle = 30;
+slideDepth = 3.2;
+slideLength = 15;
 
 description="Long Rifle Bullet (#11)";
 caliber=7.82;
@@ -482,7 +487,9 @@ hole_multiplier=1.7;
 bevelSize = 1.65;
 ridgeAlternate = true;
 ridgeLength = 15;
-ridgeAngle = 40;
+ridgeAngle = 30;
+slideDepth = 4.5;
+slideLength = 15; 
 
 description="Large Brass Base Up";
 caliber=12.5;
@@ -493,7 +500,9 @@ hole_multiplier=1.5;
 bevelSize = 1.65;
 ridgeAlternate = true;
 ridgeLength = 15;
-ridgeAngle = 40;
+ridgeAngle = 30;
+slideDepth = 5.6;
+slideLength = 15; 
 
 //  ###  RIFLE BRASS SETTINGS  ###
 description="Large Rifle Brass";
@@ -599,8 +608,8 @@ bevelSize = 1.65;
 ridgeAlternate = true;
 ridgeLength = 20;
 ridgeAngle = 30;
-slideDepth = 5.9;
-slideLength = 15;
+slideDepth = 6.5;
+slideLength = 30;
 
 description="Small Brass Base Up";
 collator_plate_d=297; 
@@ -613,8 +622,8 @@ bevelSize = 1.65;
 ridgeAlternate = true;
 ridgeLength = 20;
 ridgeAngle = 30;
-slideDepth = 4.9;
-slideLength = 15;
+slideDepth = 5.6;
+slideLength = 30;
 
 #############  300mm  ###############
 description="Small Rifle Brass";
