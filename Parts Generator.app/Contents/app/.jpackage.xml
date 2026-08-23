@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<jpackage-state version="25.0.4.1" platform="macOS">
+  <app-version>1.0</app-version>
+  <main-launcher>Parts Generator</main-launcher>
+  <main-class>partsgenerator.Main</main-class>
+  <app-store>false</app-store>
+  <signed>false</signed></jpackage-state>
